@@ -56,35 +56,35 @@ function LoadMinimap()
 end
 
 local _lastFuelUpdate = 0
-local _lastFuelCheck = nil
+local _lastFuelCheck = 100
 
 function GetFuelLevel(vehicle)
-	if not vehicle or not DoesEntityExist(vehicle) then return 100 end
+	if not vehicle or not DoesEntityExist(vehicle) then 
+		return _lastFuelCheck
+	end
 	
-	local updateTick = GetGameTimer()
-	if (updateTick - _lastFuelUpdate) > 500 then
-		_lastFuelUpdate = updateTick
-		local fuel = 100
-		
-		-- Try mythic-fuel export first
+	local fuel = 100
+	
+	-- First try native fuel level (most reliable)
+	local nativeFuel = GetVehicleFuelLevel(vehicle)
+	if nativeFuel and nativeFuel >= 0 then
+		-- GTA V native fuel returns 0-65, scale to 0-100
+		fuel = (nativeFuel / 65) * 100
+	else
+		-- Fallback to mythic-fuel if native doesn't work
 		if GetResourceState('mythic-fuel') == 'started' then
 			local success, result = pcall(function()
-				return exports['mythic-fuel']:GetFuel(vehicle)
+				local fuelValue = exports['mythic-fuel']:GetFuel(vehicle)
+				return tonumber(fuelValue)
 			end)
-			if success then
-				fuel = math.floor(tonumber(result) or 100)
-			else
-				-- Fallback to native
-				fuel = math.floor(GetVehicleFuelLevel(vehicle))
+			if success and result and result >= 0 then
+				fuel = result
 			end
-		else
-			-- Use native fuel level
-			fuel = math.floor(GetVehicleFuelLevel(vehicle))
 		end
-		
-		_lastFuelCheck = math.max(0, math.min(100, fuel))
 	end
-	return _lastFuelCheck or 100
+	
+	_lastFuelCheck = math.max(0, math.min(100, math.floor(fuel)))
+	return _lastFuelCheck
 end
 
 AddEventHandler("Core:Shared:Ready", function()
@@ -222,18 +222,11 @@ HUD = {
 			return
 		end
 
-		local fuel = nil
-		if GLOBAL_VEH ~= nil and DoesEntityExist(GLOBAL_VEH) then
-			local vehState = Entity(GLOBAL_VEH).state
-			fuel = vehState.Fuel
-		end
-
 		SendNUIMessage({
 			type = "SHOW_HUD",
 			data = {
 				hp = (GetEntityHealth(PlayerPedId()) - 100),
 				armor = GetPedArmour(PlayerPedId()),
-				fuel = fuel,
 			},
 		})
 		_toggled = true
@@ -313,6 +306,17 @@ HUD = {
 				type = "SHOW_VEHICLE",
 			})
 			_vehToggled = true
+			
+			-- Send initial fuel value immediately
+			if GLOBAL_VEH and DoesEntityExist(GLOBAL_VEH) then
+				Wait(50)
+				local initialFuel = GetFuelLevel(GLOBAL_VEH)
+				SendNUIMessage({
+					type = "UPDATE_FUEL",
+					data = { fuel = initialFuel, fuelHide = false },
+				})
+			end
+			
 			StartVehicleThreads()
 		end,
 		Hide = function(self)
@@ -700,7 +704,7 @@ function StartVehicleThreads()
 	CreateThread(function()
 		DisplayRadar(true)
 		while _vehToggled do
-			local speed = math.ceil(GetEntitySpeed(GLOBAL_VEH) * 2.237)
+			local speed = math.floor(GetEntitySpeed(GLOBAL_VEH) * 2.237)
 			local engineHealth = 0
 			local fuel = 0
 			if GLOBAL_VEH and DoesEntityExist(GLOBAL_VEH) then
@@ -721,7 +725,7 @@ function StartVehicleThreads()
 			})
 			SendNUIMessage({
 				type = "UPDATE_FUEL",
-				data = { fuel = fuel },
+				data = { fuel = fuel, fuelHide = false },
 			})
 			Wait(100)
 		end

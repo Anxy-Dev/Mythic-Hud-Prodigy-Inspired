@@ -119,7 +119,14 @@ const Speedometer = () => {
   const speedMeasure = useSelector((state) => state.vehicle.speedMeasure || 'MPH');
   const rpm = useSelector((state) => state.vehicle.rpm || 0);
   const seatbelt = useSelector((state) => state.vehicle.seatbelt);
-  const fuel = useSelector((state) => state.vehicle.fuel);
+  const fuel = useSelector((state) => {
+    const f = state.vehicle.fuel;
+    // Only show fuel if it's been set by UPDATE_FUEL
+    if (f === null || f === undefined || typeof f !== 'number' || isNaN(f)) {
+      return showing ? 0 : 100; // 0 if vehicle is shown but no fuel yet, else 100 as fallback
+    }
+    return Math.max(0, Math.min(100, f));
+  });
   const engineHealth = useSelector((state) => state.vehicle.engineHealth || 100);
   const fuelHide = useSelector((state) => state.vehicle.fuelHide);
   const engineHealthHide = useSelector((state) => state.vehicle.engineHealthHide);
@@ -143,8 +150,8 @@ const Speedometer = () => {
             <Arc width="220" height="220">
               <defs>
                 <linearGradient id="speedGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#92db24" />
-                  <stop offset="100%" stopColor="#FF3838" />
+                  <stop offset="0%" stopColor="#FFB200" />
+                  <stop offset="100%" stopColor="#FF9900" />
                 </linearGradient>
               </defs>
               <circle
@@ -264,12 +271,16 @@ const Speedometer = () => {
 
           <Labels>
             <LabelColumn>
+              <LabelText>FUEL</LabelText>
+              <LabelBar color={fuel >= 60 ? '#00FF00' : fuel >= 25 ? 'orange' : '#FF3838'} />
+            </LabelColumn>
+            <LabelColumn>
               <LabelText>ENG</LabelText>
-              <LabelBar color={!engineHealthHide ? (engineHealth > 50 ? '#92db24' : 'rgb(255, 50, 50)') : '#666'} />
+              <LabelBar color={!engineHealthHide ? (engineHealth > 50 ? '#00FF00' : 'rgb(255, 50, 50)') : '#666'} />
             </LabelColumn>
             <LabelColumn>
               <LabelText>BELT</LabelText>
-              <LabelBar color={seatbelt ? 'orange' : '#666'} />
+              <LabelBar color={seatbelt ? '#00FF00' : '#666'} />
             </LabelColumn>
           </Labels>
         </Box>

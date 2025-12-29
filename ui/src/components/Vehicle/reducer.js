@@ -7,7 +7,7 @@ export const initialState = {
     seatbeltHide: false,
     cruise: false,
     checkEngine: false,
-    fuel: 100,
+    fuel: null,
     fuelHide: false,
     engineHealth: 100,
     engineHealthHide: false,
@@ -19,6 +19,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 showing: true,
+                fuel: state.fuel !== null ? state.fuel : null, // Preserve fuel, don't reset to 100
             };
         case 'HIDE_VEHICLE':
             return {
@@ -65,16 +66,13 @@ export default (state = initialState, action) => {
                 ...state,
                 checkEngine: action.payload.checkEngine,
             };
-        case 'SHOW_HUD':
         case 'UPDATE_FUEL':
             return {
                 ...state,
-                fuel: Boolean(action.payload.fuel)
-                    ? action.payload.fuel
-                    : state.fuel,
-                fuelHide: typeof(action.payload.fuelHide) == "boolean"
+                fuel: typeof(action.payload.fuel) === 'number' ? action.payload.fuel : state.fuel,
+                fuelHide: typeof(action.payload.fuelHide) === 'boolean'
                     ? action.payload.fuelHide
-                    : state.fuelHide
+                    : false
             };
         case 'SHOW_FUEL':
             return {
@@ -101,6 +99,9 @@ export default (state = initialState, action) => {
                 ...state,
                 engineHealthHide: true,
             };
+        case 'SHOW_HUD':
+            // Don't reset vehicle state on SHOW_HUD
+            return state;
         default:
             return state;
     }
