@@ -18,39 +18,42 @@ const useStyles = makeStyles((theme) => ({
         top: 200,
         right: '15%',
         margin: 'auto',
+        fontFamily: '"Poppins", sans-serif',
+        fontWeight: 300,
     },
     header: {
         padding: 10,
-        background: theme.palette.secondary.light,
-        border: `1px solid ${theme.palette.border.divider}`,
+        background: 'rgba(4, 24, 0, 0.5)',
         borderBottom: 'none',
+        color: '#c2eb2d',
+        fontSize: '1.5rem',
     },
     title: {
         lineHeight: '38px',
     },
     headerAction: {
         fontSize: 14,
+        color: '#c2eb2d',
     },
     list: {
         paddingTop: 0,
         paddingBottom: 0,
         maxHeight: '100%',
-        border: `1px solid ${theme.palette.border.divider}`,
-        borderTop: 'none',
         overflowY: 'auto',
         overflowX: 'hidden',
         '&::-webkit-scrollbar': {
-            width: 6,
+            width: '0.35rem',
         },
         '&::-webkit-scrollbar-thumb': {
-            background: theme.palette.primary.main,
-            transition: 'background ease-in 0.15s',
+            background: 'rgba(194, 235, 45, 0.65)',
+            borderRadius: '0.23rem',
         },
         '&::-webkit-scrollbar-thumb:hover': {
-            background: theme.palette.primary.dark,
+            background: '#a3cf23',
         },
         '&::-webkit-scrollbar-track': {
-            background: theme.palette.secondary.main,
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '0.33rem',
         },
     },
 }));
