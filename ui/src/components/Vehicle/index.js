@@ -16,27 +16,13 @@ const Wrapper = styled(Box)(() => ({
 
 const Container = styled(Box)(() => ({
   position: 'absolute',
-  bottom: 10,
-  right: 120,
+  bottom: 30,
+  right: 30,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   zIndex: 1000,
-}));
-
-const SpeedText = styled(Typography)(() => ({
-  fontSize: 34,
-  fontWeight: 700,
-  color: '#fff',
-  marginTop: 12,
-}));
-
-const UnitText = styled(Typography)(() => ({
-  fontSize: 14,
-  fontWeight: 500,
-  color: '#c0c0c0',
-  marginTop: -4,
-  textTransform: 'uppercase',
+  transform: 'perspective(450px) rotateY(-2.25deg)',
 }));
 
 const LabelColumn = styled(Box)(() => ({
@@ -68,17 +54,6 @@ const Labels = styled(Box)(() => ({
   marginTop: -16,
 }));
 
-const LabelIcon = styled(Box)(({ color }) => ({
-  width: 26,
-  height: 26,
-  borderRadius: '50%',
-  backgroundColor: color,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  boxShadow: `0 0 6px ${color}`,
-}));
-
 const TickContainer = styled(Box)(() => ({
   position: 'absolute',
   width: '100%',
@@ -87,18 +62,6 @@ const TickContainer = styled(Box)(() => ({
   left: 0,
   borderRadius: '50%',
   pointerEvents: 'none',
-}));
-
-const Tick = styled(Box)(({ rotate }) => ({
-  position: 'absolute',
-  top: '8px',
-  left: '50%',
-  width: 3,
-  height: 14,
-  backgroundColor: '#FFFFFF',
-  opacity: 0.3,
-  transform: `translateX(-50%) rotate(${rotate}deg)`,
-  transformOrigin: 'center 82px',
 }));
 
 const Arc = styled('svg')({
@@ -117,7 +80,6 @@ const Speedometer = () => {
   const ignition = useSelector((state) => state.vehicle.ignition);
   const speed = useSelector((state) => state.vehicle.speed);
   const speedMeasure = useSelector((state) => state.vehicle.speedMeasure || 'MPH');
-  const rpm = useSelector((state) => state.vehicle.rpm || 0);
   const seatbelt = useSelector((state) => state.vehicle.seatbelt);
   const fuel = useSelector((state) => {
     const f = state.vehicle.fuel;
@@ -141,11 +103,11 @@ const Speedometer = () => {
       <Container
         ref={containerRef}
         style={{
-          bottom: `${position.bottom}px`,
-          right: `${position.right}px`,
+          bottom: 24,
+          right: 24,
         }}
       >
-        <Box mt={10}>
+        <Box mt={10} style={{ transform: 'perspective(450px) rotateY(-2.25deg)' }}>
           <Wrapper>
             <Arc width="220" height="220">
               <defs>
