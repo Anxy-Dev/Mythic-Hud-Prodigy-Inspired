@@ -8,7 +8,6 @@ import Nui from '../../util/Nui';
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
-<<<<<<< HEAD
         width: '19%',
         height: 'fit-content',
         position: 'absolute',
@@ -35,24 +34,6 @@ const useStyles = makeStyles((theme) => ({
     },
     progressbar: {
         transition: 'width 0.3s ease-out !important',
-=======
-        width: '100%',
-        maxWidth: 500,
-        height: 'fit-content',
-        position: 'absolute',
-        bottom: '10%',
-        left: 0,
-        right: 0,
-        margin: 'auto',
-    },
-    label: {
-        color: theme.palette.text.main,
-        fontSize: 18,
-        textShadow: '0 0 5px #000',
-    },
-    progressbar: {
-        transition: 'none !important',
->>>>>>> 3af374841887f01b11bef2f6d427b568b14fbdc5
     },
 }));
 
@@ -72,7 +53,6 @@ export default connect(mapStateToProps)(
 
         const BorderLinearProgress = withStyles((theme) => ({
             root: {
-<<<<<<< HEAD
                 height: '0.9vh',
                 borderRadius: 4,
                 background: `repeating-linear-gradient(
@@ -96,21 +76,6 @@ export default connect(mapStateToProps)(
                         : '#79EF0B',
                 boxShadow: '0px 0px 30px rgba(194, 255, 73, 0.8)',
                 transition: 'width 0.3s ease-out',
-=======
-                height: 8,
-            },
-            colorPrimary: {
-                backgroundColor: theme.palette.secondary.dark,
-            },
-            bar: {
-                borderRadius: 5,
-                backgroundColor:
-                    cancelled || failed
-                        ? theme.palette.primary.main
-                        : finished
-                        ? theme.palette.success.main
-                        : theme.palette.info.main,
->>>>>>> 3af374841887f01b11bef2f6d427b568b14fbdc5
             },
         }))(LinearProgress);
 
@@ -178,7 +143,6 @@ export default connect(mapStateToProps)(
                                 : failed
                                 ? 'Failed'
                                 : cancelled
-<<<<<<< HEAD
                                 ? 'CANCELLED'
                                 : label}
                         </Grid>
@@ -187,17 +151,6 @@ export default connect(mapStateToProps)(
                                 <span>
                                     {Math.round((curr / duration) * 100)}%
                                 </span>
-=======
-                                ? 'Cancelled'
-                                : label}
-                        </Grid>
-                        <Grid item xs={6} style={{ textAlign: 'right' }}>
-                            {!cancelled && !finished && !failed && (
-                                <small>
-                                    {Math.round(curr / 1000)}s /{' '}
-                                    {Math.round(duration / 1000)}s
-                                </small>
->>>>>>> 3af374841887f01b11bef2f6d427b568b14fbdc5
                             )}
                         </Grid>
                     </Grid>
