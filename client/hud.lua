@@ -874,3 +874,54 @@ end)
 -- 		SetRadarZoom(_zoomLevels[_zoomLevel])
 -- 	end)
 -- end
+
+local function loadMap()
+	CreateThread(function()
+		Wait(50)
+		local defaultAspectRatio = 1920 / 1080
+		local resolutionX, resolutionY = GetActiveScreenResolution()
+		local aspectRatio = resolutionX / resolutionY
+		local minimapOffset = 0
+		if aspectRatio > defaultAspectRatio then
+			minimapOffset = ((defaultAspectRatio - aspectRatio) / 3.6) - 0.02
+		end
+
+		RequestStreamedTextureDict('slanted_minimap', false)
+		while not HasStreamedTextureDictLoaded('slanted_minimap') do
+			Wait(0)
+		end
+
+		SetMinimapClipType(1)
+		AddReplaceTexture('platform:/textures/graphics', 'radarmasksm', 'slanted_minimap', 'radarmasksm')
+		AddReplaceTexture('platform:/textures/graphics', 'radarmask1g', 'slanted_minimap', 'radarmasksm')
+		SetMinimapComponentPosition('minimap', 'L', 'B', 0.0 + 0.01, -0.047 + -0.025, 0.1638, 0.183)
+		SetMinimapComponentPosition('minimap_mask', 'L', 'B', 0.0 + 0.01, 0.0 + -0.025, 0.128, 0.20)
+		SetMinimapComponentPosition('minimap_blur', 'L', 'B', -0.01 + 0.01, 0.025 + -0.025, 0.262, 0.300)
+		SetBlipAlpha(GetNorthRadarBlip(), 0)
+		SetMinimapClipType(1)
+		SetBigmapActive(true, false)
+		Wait(50)
+		SetBigmapActive(false, false)
+		SetStreamedTextureDictAsNoLongerNeeded('slanted_minimap')
+	end)
+end
+
+CreateThread(function()
+	local minimap = RequestScaleformMovie('minimap')
+	if not HasScaleformMovieLoaded(minimap) then
+		RequestScaleformMovie(minimap)
+		while not HasScaleformMovieLoaded(minimap) do
+			Wait(1)
+		end
+	end
+	while true do
+		SetBigmapActive(false, false)
+		SetRadarZoom(1000)
+		Wait(500)
+	end
+end)
+
+CreateThread(function()
+	Wait(1000)
+	loadMap()
+end)

@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
         left: '0vh',
         width: '50%',
         height: '90%',
-        transform: 'perspective(450px) rotateY(2.5deg)',
+        transform: 'perspective(450px) rotateY(2.25deg)',
     },
     rightDiv: {
         position: 'absolute',
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         right: '0vh',
         width: '50%',
         height: '90%',
-        transform: 'perspective(450px) rotateY(-2.5deg)',
+        transform: 'perspective(450px) rotateY(-2.25deg)',
     },
     barsWrapper: {
         position: 'absolute',
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         color: 'rgba(255, 255, 255, 0.815)',
-        fontSize: '2vh',
+        fontSize: '1.5vh',
         marginRight: '1.5vh',
         marginLeft: '-0.5vh',
         minWidth: '2.5vh',
@@ -54,10 +54,10 @@ const useStyles = makeStyles((theme) => ({
     barTxt: {
         position: 'absolute',
         top: '50%',
-        left: '3.5vh',
+        left: '3.25vh',
         color: '#92db24',
         textShadow: '1px 1px black',
-        fontSize: '1.8vh',
+        fontSize: '1.4vh',
         fontWeight: 'bold',
         transform: 'translate(-50%, -50%)',
     },
@@ -68,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
         width: '23vh',
         height: '0.75vh',
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        borderRadius: '0.2vh',
     },
     healthbar: {
         position: 'relative',
@@ -82,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
         top: '0.8vh',
         right: '0vh',
         width: '23vh',
-        height: '0.5vh',
+        height: '.9vh',
     },
     armorBar: {
         position: 'relative',
@@ -99,7 +98,6 @@ const useStyles = makeStyles((theme) => ({
         gap: '0.5vh',
     },
     armorBarPill: {
-        borderRadius: '0.5vh',
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
     },
     statWrapper: {
@@ -154,7 +152,6 @@ const useStyles = makeStyles((theme) => ({
         transition: 'height 0.2s ease',
         background: 'linear-gradient(to top, #FFD700, #FFA500)',
         boxShadow: '0 0 0.5vh #FFD700',
-        borderRadius: '0.1vh',
     },
     talkingIcon: {
         position: 'absolute',
@@ -182,10 +179,28 @@ export default withTheme(() => {
     const GetHealth = () => {
         return (
             <div className={classes.barWrapper}>
-                <FontAwesomeIcon icon="heart" className={classes.icon} style={{ color: health === 0 ? 'red' : 'rgba(255, 255, 255, 0.815)' }} />
-                <span className={classes.barTxt} style={{ color: health === 0 ? 'red' : '#92db24' }}>{health}</span>
-                <div className={classes.barBase} style={{ boxShadow: health === 0 ? '0 0 1vh red' : 'none' }}>
-                    <div className={classes.healthbar} style={{ width: `${health}%` }} />
+                <FontAwesomeIcon
+                    icon="heart"
+                    className={classes.icon}
+                    style={{
+                        color:
+                            health === 0 ? 'red' : 'rgba(255, 255, 255, 0.815)',
+                    }}
+                />
+                <span
+                    className={classes.barTxt}
+                    style={{ color: health === 0 ? 'red' : '#92db24' }}
+                >
+                    {health}
+                </span>
+                <div
+                    className={classes.barBase}
+                    style={{ boxShadow: health === 0 ? '0 0 1vh red' : 'none' }}
+                >
+                    <div
+                        className={classes.healthbar}
+                        style={{ width: `${health}%` }}
+                    />
                 </div>
             </div>
         );
@@ -195,18 +210,34 @@ export default withTheme(() => {
         if (armor <= 0 || isDead) return null;
         return (
             <div className={classes.barWrapper}>
-                <FontAwesomeIcon icon="shield" className={classes.icon} style={{ color: '#2489db' }} />
-                <span className={classes.barTxt} style={{ color: '#2489db' }}>{armor}</span>
+                <FontAwesomeIcon
+                    icon="shield"
+                    className={classes.icon}
+                    style={{ color: '#25b8f2' }}
+                />
+                <span className={classes.barTxt} style={{ color: '#25b8f2' }}>
+                    {armor}
+                </span>
                 <div className={classes.armorBarWrapper}>
                     <div className={classes.armorBarBase}>
                         {[...Array(5)].map((_, i) => (
                             <div key={i} className={classes.armorBarPill} />
                         ))}
                     </div>
-                    <div className={classes.armorBar} style={{ width: `${armor}%` }}>
+                    <div
+                        className={classes.armorBar}
+                        style={{ width: `${armor}%` }}
+                    >
                         <div className={classes.armorBarBase}>
                             {[...Array(5)].map((_, i) => (
-                                <div key={i} className={classes.armorBarPill} style={{ backgroundColor: '#2489db', boxShadow: '0 0 0.5vh #2489db' }} />
+                                <div
+                                    key={i}
+                                    className={classes.armorBarPill}
+                                    style={{
+                                        backgroundColor: '#25b8f2',
+                                        boxShadow: '0 0 0.5vh #25b8f2',
+                                    }}
+                                />
                             ))}
                         </div>
                     </div>
@@ -231,18 +262,21 @@ export default withTheme(() => {
             return (
                 <div key={i} className={classes.stat}>
                     <div className={classes.statBarBase}>
-                        <div 
-                            className={classes.statBar} 
+                        <div
+                            className={classes.statBar}
                             style={{
                                 height: `${status.value}%`,
-                                backgroundColor: status.color || 'rgb(139, 91, 252)',
-                                boxShadow: `0 0 0.5vh ${status.color || 'rgb(139, 91, 252)'}`,
+                                backgroundColor:
+                                    status.color || 'rgb(139, 91, 252)',
+                                boxShadow: `0 0 0.5vh ${
+                                    status.color || 'rgb(139, 91, 252)'
+                                }`,
                             }}
                         />
                     </div>
                     {hasBoost && (
                         <div className={classes.boostBar}>
-                            <div 
+                            <div
                                 className={classes.boostBarFill}
                                 style={{
                                     height: `${boostValue}%`,
@@ -250,13 +284,14 @@ export default withTheme(() => {
                             />
                         </div>
                     )}
-                    <FontAwesomeIcon 
-                        icon={status.icon || 'question'} 
+                    <FontAwesomeIcon
+                        icon={status.icon || 'question'}
                         className={classes.barIcon}
                     />
                 </div>
             );
-        }).filter(Boolean);
+        })
+        .filter(Boolean);
 
     return (
         <>
@@ -271,12 +306,15 @@ export default withTheme(() => {
                     </div>
                 </div>
             </div>
-            
+
             {isOnPhone && (
                 <FontAwesomeIcon icon="phone" className={classes.talkingIcon} />
             )}
             {isOnRadio && !isOnPhone && (
-                <FontAwesomeIcon icon="walkie-talkie" className={classes.talkingIcon} />
+                <FontAwesomeIcon
+                    icon="walkie-talkie"
+                    className={classes.talkingIcon}
+                />
             )}
         </>
     );
